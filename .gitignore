@@ -1,7 +1,10 @@
+# Java stuff
 *.class
 
-# Mobile Tools for Java (J2ME)
-.mtj.tmp/
+# Idea stuff
+.idea/workspace.xml
+.idea/misc.xml
+out
 
 # Package Files #
 *.jar
@@ -10,3 +13,6 @@
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
+
+# other
+.DS_Store
