@@ -310,7 +310,7 @@ final class QmParser {
   private void nextChar() {
     offset++;
     pos++;
-    eof = offset < len;
+    eof = offset >= len;
     cp = cc;
     cc = cn;
     cn = offset+1 < len ? text.charAt(offset+1) : EOT;
