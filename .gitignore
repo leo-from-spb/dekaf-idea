@@ -4,6 +4,7 @@
 # Idea stuff
 .idea/workspace.xml
 .idea/misc.xml
+.idea/shelf
 out
 
 # Package Files #
