@@ -64,7 +64,7 @@ final class QmParser {
       parseEntity();
     }
 
-    eb.reset(offset, line, pos);
+    eb.reset(getPosition());
     eb.setType(EOF);
     push();
 
@@ -73,7 +73,7 @@ final class QmParser {
 
 
   private void parseEntity() {
-    eb.reset(offset, line, pos);
+    eb.reset(getPosition());
     boolean done = eof;
     switch (cc) {
       case '-':
@@ -238,10 +238,11 @@ final class QmParser {
       }
     }
 
-    if (offset > eb.entBegin) {
+    if (offset > eb.roomBeg.offset) {
       eb.setType(SQL_STUFF);
-      eb.setInnerEnd(offset);
-      eb.setEntEnd(offset);
+      TextPosition position = getPosition();
+      eb.setContentEnd(position);
+      eb.setRoomEnd(position);
       push();
       return true;
     }
@@ -281,10 +282,11 @@ final class QmParser {
       }
     }
 
-    if (offset > eb.entBegin) {
+    if (offset > eb.roomBeg.offset) {
       eb.setType(ERROR);
-      eb.setInnerEnd(offset);
-      eb.setEntEnd(offset);
+      TextPosition position = getPosition();
+      eb.setContentEnd(position);
+      eb.setRoomEnd(position);
       push();
       return true;
     }
@@ -337,5 +339,10 @@ final class QmParser {
     entities.add(entity);
   }
 
+
+  @NotNull
+  private TextPosition getPosition() {
+    return new TextPosition(line, pos, offset);
+  }
 
 }

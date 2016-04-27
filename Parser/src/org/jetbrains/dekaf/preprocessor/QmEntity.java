@@ -10,42 +10,39 @@ import java.io.Serializable;
  **/
 final class QmEntity implements Serializable, Comparable<QmEntity> {
 
-  final int entBegin;
-  final int innerBegin;
-  final int innerEnd;
-  final int entEnd;
+  /**
+   * Whole entity room in the text.
+   */
+  @NotNull
+  final TextInterval room;
 
-  final int entLine;
-  final int entPos;
-  final int innerLine;
-  final int innerPos;
+  /**
+   * The content part interval in the text.
+   * If no content, may be the same as the {@see #room}.
+   */
+  @NotNull
+  final TextInterval content;
 
+  /**
+   * Type of the entity.
+   */
   @NotNull
   final QmEntityType type;
 
 
-  public QmEntity(int entBegin, int innerBegin, int innerEnd, int entEnd,
-                  int entLine, int entPos, int innerLine, int innerPos,
-                  @NotNull QmEntityType type) {
-    assert entBegin <= innerBegin && innerBegin <= innerEnd && innerEnd <= entEnd;
-    this.entBegin = entBegin;
-    this.innerBegin = innerBegin;
-    this.innerEnd = innerEnd;
-    this.entEnd = entEnd;
-    this.entLine = entLine;
-    this.entPos = entPos;
-    this.innerLine = innerLine;
-    this.innerPos = innerPos;
+  public QmEntity(@NotNull TextInterval room, @NotNull TextInterval content, @NotNull QmEntityType type) {
+    this.room = room;
+    this.content = content;
     this.type = type;
   }
 
 
   @Override
   public int compareTo(@NotNull QmEntity that) {
-    int z = this.entBegin - that.entBegin;
-    if (z == 0) z = this.innerBegin - that.innerBegin;
-    if (z == 0) z = this.innerEnd - that.innerEnd;
-    if (z == 0) z = this.entEnd - that.entEnd;
+    int z = this.room.beg.compareTo(that.room.beg);
+    if (z == 0) z = this.content.beg.compareTo(that.content.beg);
+    if (z == 0) z = this.content.end.compareTo(that.content.end);
+    if (z == 0) z = this.room.end.compareTo(that.room.end);
     if (z == 0) z = this.type.ordinal() - that.type.ordinal();
     return z;
   }
@@ -59,17 +56,21 @@ final class QmEntity implements Serializable, Comparable<QmEntity> {
     QmEntity that = (QmEntity) o;
 
     // @formatter:off
-    return entBegin   == that.entBegin
-        && innerBegin == that.innerBegin
-        && innerEnd   == that.innerEnd
-        && entEnd     == that.entEnd
-        && type       == that.type;
+    return room.equals(that.room)
+        && content.equals(that.content)
+        && type == that.type;
     // @formatter:on
   }
 
 
   @Override
   public int hashCode() {
-    return entBegin * 29 + innerBegin * 17 + innerEnd * 7 + entEnd * 3;
+    return room.hashCode() * 37 + content.hashCode() * 7;
+  }
+
+
+  @Override
+  public String toString() {
+    return room + " | " + content + " | " + type;
   }
 }

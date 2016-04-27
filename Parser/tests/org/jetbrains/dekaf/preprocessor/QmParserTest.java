@@ -1,12 +1,13 @@
 package org.jetbrains.dekaf.preprocessor;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
+import java.util.Arrays;
+
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.jetbrains.dekaf.preprocessor.QmEntityType.EOF;
-import static org.jetbrains.dekaf.preprocessor.QmEntityType.SQL_STUFF;
 
 
 
@@ -21,32 +22,26 @@ public class QmParserTest {
         "G H I\n";
     QmParser parser = new QmParser(text);
     QmEntity[] entities = parser.parse();
+    String dump = dump(entities);
 
-    assertThat(entities.length).isEqualTo(2); // 1 - our SQL text, 2 - EOF
-
-    QmEntity entity = entities[0];
-
-    assertThat(entity.entBegin).isEqualTo(0);
-    assertThat(entity.entLine).isEqualTo(1);
-    assertThat(entity.entPos).isEqualTo(1);
-    assertThat(entity.innerBegin).isEqualTo(0);
-    assertThat(entity.innerLine).isEqualTo(1);
-    assertThat(entity.innerPos).isEqualTo(1);
-
-    assertThat(entity.entEnd).isEqualTo(18);
-    assertThat(entity.innerEnd).isEqualTo(18);
-
-    assertThat(entity.type).isEqualTo(SQL_STUFF);
-
-    QmEntity eof = entities[1];
-
-    assertThat(eof.entBegin).isEqualTo(18);
-    assertThat(eof.entEnd).isEqualTo(18);
-    assertThat(eof.innerBegin).isEqualTo(18);
-    assertThat(eof.innerEnd).isEqualTo(18);
-
-    assertThat(eof.type).isEqualTo(EOF);
+    assertThat(dump).contains("1:1:0-4:0:18 | 1:1:0-4:0:18 | SQL_STUFF")
+                    .contains("4:0:18-4:0:18 | 4:0:18-4:0:18 | EOF");
   }
 
+
+  @NotNull
+  private String dump(QmEntity[] entities) {
+    if (entities == null) return "(null)";
+    return dump(Arrays.asList(entities));
+  }
+
+
+  @NotNull
+  private static String dump(final Iterable<QmEntity> entities) {
+    if (entities == null) return "(null)";
+    StringBuilder b = new StringBuilder();
+    for (QmEntity entity : entities) b.append(entity.toString()).append('\n');
+    return b.toString();
+  }
 
 }
