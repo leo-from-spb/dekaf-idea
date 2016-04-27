@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/parser/parser.iml" filepath="$PROJECT_DIR$/parser/parser.iml" />
-      <module fileurl="file://$PROJECT_DIR$/plugin/plugin.iml" filepath="$PROJECT_DIR$/plugin/plugin.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Parser1/Parser1.iml" filepath="$PROJECT_DIR$/Parser1/Parser1.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Plugin1/Plugin1.iml" filepath="$PROJECT_DIR$/Plugin1/Plugin1.iml" />
     </modules>
   </component>
 </project>
